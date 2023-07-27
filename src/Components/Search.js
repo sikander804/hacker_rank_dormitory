@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { STUDENTS } from '../studentsList';
 
 // `joiningDate` && `validityDate` format "yyyy-mm-dd"
 
@@ -13,21 +14,57 @@ function checkValidity(joiningDate, validityDate) {
 	return (maxValid >= selected) && (maxValid >= today);
 }
 
-function Search() {
+function Search({setJoiningDate,setStudentName,studentName,joiningDate,setIsVerified,setResidents,residents}) {
+	const handleSubmit = (e) => {
+		e.preventDefault()
+
+		const student = STUDENTS.find((st) => {
+			if(st.name.toLowerCase() === studentName.toLowerCase()){
+				return st;
+			}
+		})
+		// console.log('residents',studentName,joiningDate)
+		// return
+		if(!student?.name){
+			setIsVerified({studentName:studentName,studentVerified:false,studentValidity:false})
+			setStudentName('');
+			setJoiningDate('');
+			return;
+		}
+
+		if(student?.name && student?.validityDate){
+			const isValidInput = checkValidity(joiningDate, student?.validityDate);
+			if(!isValidInput){
+				setIsVerified({studentName:studentName,studentVerified:true,studentValidity:false})
+				setStudentName('');
+		setJoiningDate('');
+			}else {
+				setIsVerified({studentName:studentName,studentVerified:true,studentValidity:true})
+				setResidents([...residents,{name:studentName,joiningDate:joiningDate}])
+				setStudentName('');
+		setJoiningDate('');
+			}
+		}
+		
+		
+	}
+
 	return (
+		<form onSubmit={handleSubmit}>
 		<div className="my-50 layout-row align-items-end justify-content-end">
 			<label htmlFor="studentName">Student Name:
 				<div>
-					<input id="studentName" data-testid="studentName" type="text" className="mr-30 mt-10" />
+					<input id="studentName" data-testid="studentName" type="text" className="mr-30 mt-10" value={studentName} onChange={(e) => setStudentName(e.target.value)} />
 				</div>
 			</label>
 			<label htmlFor="joiningDate">Joining Date:
 				<div>
-					<input id="joiningDate" data-testid="joiningDate" type="date" className="mr-30 mt-10"/>
+					<input id="joiningDate" data-testid="joiningDate" type="date" className="mr-30 mt-10" value={joiningDate} onChange={(e) => setJoiningDate(e.target.value)}/>
 				</div>
 			</label>
-			<button type="button" data-testid="addBtn" className="small mb-0" onSubmit={checkValidity}>Add</button>
+			<button type="submit" data-testid="addBtn" className="small mb-0">Add</button>
 		</div>
+		</form>
 	);
 }
 

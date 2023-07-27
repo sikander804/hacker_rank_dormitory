@@ -1,7 +1,15 @@
 import React from 'react';
 
-function Error() {
-	return <div data-testid="errorMsg" className="alert error mt-20 slide-up-fade-in">Error Message</div>
+function Error({isVerified}) {
+	return !isVerified.studentVerified ? (
+	<div data-testid="errorMsg" className="alert error mt-20 slide-up-fade-in">
+		{`Sorry, ${isVerified.studentName} is not a verified student!`}
+		</div>
+	) : isVerified.studentVerified && !isVerified.studentValidity && (
+		<div data-testid="errorMsg" className="alert error mt-20 slide-up-fade-in">
+		{`Sorry, ${isVerified.studentName}'s validity has Expired!`}
+		</div>
+	)
 }
 
 export default Error;
