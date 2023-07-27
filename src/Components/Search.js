@@ -9,6 +9,7 @@ function checkValidity(joiningDate, validityDate) {
 	const [yyyy, mm, dd] = validityDate.split('-');
 	const maxValid = new Date(yyyy, mm - 1, dd);
 	const selected = new Date(year, month - 1, day);
+	console.log('### selected',selected)
 	return (maxValid >= selected) && (maxValid >= today);
 }
 
@@ -17,7 +18,7 @@ function Search() {
 		<div className="my-50 layout-row align-items-end justify-content-end">
 			<label htmlFor="studentName">Student Name:
 				<div>
-					<input id="studentName" data-testid="studentName" type="text" className="mr-30 mt-10"/>
+					<input id="studentName" data-testid="studentName" type="text" className="mr-30 mt-10" />
 				</div>
 			</label>
 			<label htmlFor="joiningDate">Joining Date:
@@ -25,7 +26,7 @@ function Search() {
 					<input id="joiningDate" data-testid="joiningDate" type="date" className="mr-30 mt-10"/>
 				</div>
 			</label>
-			<button type="button" data-testid="addBtn" className="small mb-0">Add</button>
+			<button type="button" data-testid="addBtn" className="small mb-0" onSubmit={checkValidity}>Add</button>
 		</div>
 	);
 }
